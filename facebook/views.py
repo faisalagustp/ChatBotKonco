@@ -22,9 +22,6 @@ def facebook_callback(request):
                 return HttpResponse("Failed")
         return HttpResponse("Callback")
     elif request.method=="POST":
-        for key in request.POST:
-            print(key)
-            value = request.POST[key]
-            print(value)
+        print(request.body)
         PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
         return HttpResponse("Failed")
