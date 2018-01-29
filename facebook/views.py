@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def facebook_callback(request):
-    if request.GET:
+    if request.method == "GET":
         VERIFY_TOKEN = "faisalkasepfaisalkasep"
         mode = request.GET.get('hub.mode')
         token = request.GET.get('hub.verify_token')
@@ -21,7 +21,7 @@ def facebook_callback(request):
             else:
                 return HttpResponse("Failed")
         return HttpResponse("Callback")
-    elif request.POST:
+    elif request.method=="POST":
         for key in request.POST:
             print(key)
             value = request.POST[key]
