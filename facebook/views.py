@@ -25,10 +25,10 @@ def facebook_callback(request):
         return HttpResponse("Callback")
     elif request.method=="POST":
         data_request = json.loads(request.body.decode('utf-8'))
-        if data_request.object == "page":
-            for entry in data_request.entry:
-                for messaging in entry.messaging:
-                    print(messaging.message.text)
+        if data_request["object"] == "page":
+            for entry in data_request["entry"]:
+                for messaging in entry["messaging"]:
+                    print(messaging["message"]["text"])
         else:
             return HttpResponse("Not recognized")
 
