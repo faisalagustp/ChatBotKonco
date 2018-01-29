@@ -44,9 +44,7 @@ def send_response(message, sender_id):
         },
         "message": message
     }
-
-    request_body = json.dumps(request_body)
-
+    request_body = urllib.parse.urlencode(request_body).encode('utf-8')
     try:
         req = urllib.request.Request("https://graph.facebook.com/v2.6/me/messages", data=request_body,
                                      headers={'content-type': 'application/json', "access_token":PAGE_TOKEN})
