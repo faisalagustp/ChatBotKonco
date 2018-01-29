@@ -28,7 +28,7 @@ def facebook_callback(request):
         if data_request.object == "page":
             for entry in data_request.entry:
                 for messaging in entry.messaging:
-                    print messaging.message.text
+                    print(messaging.message.text)
         else:
             return HttpResponse("Not recognized")
 
