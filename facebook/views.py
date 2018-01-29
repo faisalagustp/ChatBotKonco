@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import json
 import urllib
 
+import requests
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
@@ -37,7 +38,6 @@ def facebook_callback(request):
 
 def send_response(message, sender_id):
     PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
-
     request_body = {
         "recipient": {
             "id": sender_id
@@ -45,16 +45,31 @@ def send_response(message, sender_id):
         "message": message
     }
 
-    print (request_body)
     request_body = urllib.parse.urlencode(request_body).encode('utf-8')
     try:
-        req = urllib.request.Request("https://graph.facebook.com/v2.6/me/messages", data=request_body,
-                                     headers={'content-type': 'application/json', "access_token":PAGE_TOKEN})
-        response = urllib.request.urlopen(req)
+        params = {
+            "access_token": PAGE_TOKEN
+        }
+        headers = {
+            "Content-Type": "application/json"
+        }
+        data = json.dumps({
+            "recipient": {
+                "id": sender_id
+            },
+            "message": {
+                "text": message
+            }
+        })
+        r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
+        if r.status_code != 200:
+            print(r.status_code)
+            print(r.text)
     except Exception as e:
         print (e)
 
 def test_send_message(request):
-    send_response("Test balik","Hahahaha")
-
+    #{'message': 'goose', 'recipient': {'id': '1937861672968054'}}
+    send_response("Test balik",'1937861672968054')
+    return HttpResponse("")
 
