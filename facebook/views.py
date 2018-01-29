@@ -44,6 +44,8 @@ def send_response(message, sender_id):
         },
         "message": message
     }
+
+    print (request_body)
     request_body = urllib.parse.urlencode(request_body).encode('utf-8')
     try:
         req = urllib.request.Request("https://graph.facebook.com/v2.6/me/messages", data=request_body,
@@ -51,5 +53,8 @@ def send_response(message, sender_id):
         response = urllib.request.urlopen(req)
     except Exception as e:
         print (e)
+
+def test_send_message(request):
+    send_response("Test balik","Hahahaha")
 
 
