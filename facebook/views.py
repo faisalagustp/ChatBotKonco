@@ -5,8 +5,11 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
-def facebook_callback(request):
+from django.views.decorators.csrf import csrf_exempt
 
+
+@csrf_exempt
+def facebook_callback(request):
     if request.GET:
         VERIFY_TOKEN = "faisalkasepfaisalkasep"
         mode = request.GET.get('hub.mode')
