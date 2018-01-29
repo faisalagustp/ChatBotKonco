@@ -30,7 +30,8 @@ def facebook_callback(request):
         if data_request["object"] == "page":
             for entry in data_request["entry"]:
                 for messaging in entry["messaging"]:
-                    send_response(messaging["message"]["text"],messaging["sender"]["id"])
+                    if("message" in messaging):
+                        send_response(messaging["message"]["text"], messaging["sender"]["id"])
                     return HttpResponse("")
         else:
             return HttpResponse("Not recognized")
