@@ -24,6 +24,14 @@ def facebook_callback(request):
                 return HttpResponse("Failed")
         return HttpResponse("Callback")
     elif request.method=="POST":
-        print(json.loads(request.body.decode('utf-8')))
+        data_request = json.loads(request.body.decode('utf-8'))
+        if data_request.object == "page":
+            for entry in data_request.entry:
+                for messaging in entry.messaging:
+                    print messaging.message.text
+        else:
+            return HttpResponse("Not recognized")
+
+
         PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
         return HttpResponse("Failed")
