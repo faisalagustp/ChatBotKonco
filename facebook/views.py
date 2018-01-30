@@ -69,8 +69,3 @@ def send_response(message, sender_id):
     except Exception as e:
         print (e)
 
-def test_send_message(request):
-    #{'message': 'goose', 'recipient': {'id': '1937861672968054'}}
-    send_response("Test balik",'1937861672968054')
-    return HttpResponse("")
-

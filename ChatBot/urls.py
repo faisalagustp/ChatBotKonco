@@ -16,8 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from facebook.views import facebook_callback
+from linebot.views import line_callback
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^facebook/callback', facebook_callback)
+    url(r'^facebook/callback', facebook_callback),
+    url(r'^line/callback', line_callback),
 ]
