@@ -62,7 +62,7 @@ def send_push_message(user_id):
             ]
         })
 
-        r = requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, data=data)
+        r = requests.post("https://api.line.me/v2/bot/message/multicast", headers=headers, data=data)
         if r.status_code != 200:
             print(r.status_code)
             print(r.text)
