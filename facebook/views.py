@@ -46,6 +46,7 @@ def facebook_callback(request):
                         u_ac = user_account.objects.filter(type="facebook").filter(chat_id=chat_id)
                         if u_ac.count()>0:
                             u_ac = u_ac[0]
+                            analyze_reply(text,u_ac)
                             send_response(u_ac.short_memory,text)
                         else:
                             facebook_name = 'https://graph.facebook.com/'+chat_id+'?fields=name,id&access_token='+PAGE_TOKEN
@@ -55,7 +56,8 @@ def facebook_callback(request):
                             u_ac.chat_id = chat_id
                             u_ac.type = "facebook"
                             u_ac.short_memory = "registration|ask_name"
-                            send_response("Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan "+name+"?",chat_id,"ya|tidak")
+                            send_response("Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan "+name+"?",chat_id,"Ya|Tidak")
+                            u_ac.save()
                     return HttpResponse("")
         else:
             return HttpResponse("Not recognized")
@@ -81,18 +83,13 @@ def send_response(message, sender_id,options):
         }
 
         if options!= "":
-            data["message"]["quick_replies"] = [
-                {
+            data_options = []
+            for option in options.split("|"):
+                data_options.append({
                     "content_type":"text",
-                    "title":"Ya",
-                    "payload":"YES"
-                },
-                {
-                    "content_type": "text",
-                    "title": "Tidak",
-                    "payload": "NO"
-                }
-            ]
+                    "title":option
+                })
+            data["message"]["quick_replies"] = data_options
 
         data = json.dumps(data)
         print(data)
@@ -102,3 +99,6 @@ def send_response(message, sender_id,options):
     except Exception as e:
         print ("Error")
 
+def analyze_reply(text,u_ac):
+    print(text)
+    print(u_ac)
