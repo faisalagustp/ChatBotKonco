@@ -1,29 +1,54 @@
-<form method="POST">
-    {% csrf_token %}
-    Broadcasted Post<br/>
-    <textarea name="post_text"></textarea><br/><br/>
-    Datetime<br/>
-    <input type="date" name="datetime"><br/><br/>
-    Message Type<br/>
-    <select name="message_type">
-        <option value="Text">Text</option>
-        <option value="Quick Replies (Pilihan Ganda)">Quick Replies (Pilihan Ganda)</option>
-        <option value="Text with Attachment" disabled>Text with Attachment (Audio/Video/Image/File)</option>
-        <option value="Templates" disabled>Templates</option>
-    </select><br/><br/>
-    Details<br/>
-    <textarea name="json_extra"></textarea><br/><br/>
-    Send to:
-    <label>
-        <input type="radio" value="all" name="send_to"/> All
-    </label>
-    <label>
-        <input type="radio" value="users" name="send_to"/>
-        <select multiple name="target_users">
-            {% for user in users %}
-                <option value="{{ user.id }}">{{ user.name }}</option>
-            {% endfor %}
-        </select>
-    </label>
-    <button>Save Post</button>
-</form>
+{% extends "main.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="post_text">Broadcasted Post</label>
+                    <textarea name="post_text" id="post_text" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="datetime">Date/Time of Broadcast</label>
+                    <input type="datetime-local" id="datetime" class="form-control" name="datetime">
+                </div>
+                <div class="form-group">
+                    <label for="message_type">Message Type</label>
+                    <select name="message_type" class="form-control">
+                        <option value="Text">Text</option>
+                        <option value="Quick Replies (Pilihan Ganda)">Quick Replies (Pilihan Ganda)</option>
+                        <option value="Text with Attachment" disabled>Text with Attachment (Audio/Video/Image/File)
+                        </option>
+                        <option value="Templates" disabled>Templates</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="json_extra">Details of Broadcast</label>
+                    <textarea name="json_extra" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Send to</label>
+                    <div class="row">
+                        <div class="col">
+                            <label>
+                                <input type="radio" value="all" name="send_to"/> All
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label>
+                                <input type="radio" value="users" name="send_to"/> Send to specific target
+                                <select class="form-control" multiple name="target_users">
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.name }} in {{ user.type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Save Broadcast Post</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

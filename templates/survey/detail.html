@@ -1,6 +1,53 @@
-{{ survey.survey_name }}
+{% extends "main.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h4>{{ survey.survey_name }}</h4>
+            <h5>{{ survey.datetime }}</h5>
+            <p>{{ survey.description }}</p>
 
-{% for value in survey.survey_value_set.all %}
-    {{ value.text }}<br/>
-    {{ value.options }}
-{% endfor %}
+            <h6>Question and Options</h6>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <td>Question</td>
+                        <td>Options</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in survey.survey_value_set.all %}
+                        <tr>
+                            <td>{{ data.text }}</td>
+                            <td>{{ data.options }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h6>Result</h6>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Platform</td>
+                        <td>Answers</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in survey.survey_submission_set.all %}
+                        <tr>
+                            <td>{{ data.user_account.name }}</td>
+                            <td>{{ data.user_account.type }}</td>
+                            <td>
+                                {% for submission_value in data.survey_submission_value_set.all %}
+                                    {{ submission_value.survey_value.text }}: {{ submission_value.value }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

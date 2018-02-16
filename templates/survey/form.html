@@ -1,23 +1,61 @@
-<form method="POST">
-    {% csrf_token %}
+{% extends "main.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
 
-    Survey Name<br/>
-        <input type="text" name="survey_name"><br/><br/>
-    Send Date/Time<br/>
-        <input type="datetime-local" name="datetime"><br/><br/>
-    Description<br/>
-        <textarea name="description"></textarea><br/><br/>
-    Target Survey<br/>
-        <label>
-            <input type="radio" name="for_type" name="facebook"> Facebook
-        </label>
-        <label>
-            <input type="radio" name="for_type" name="line"> Line
-        </label>
-        <label>
-            <input type="radio" name="for_type" name="both"> Both
-        </label> <br/><br/>
-    Options<br/>
-    <textarea name="options"></textarea><br/><br/>
-    <button>Save</button>
-</form>
+                <div class="form-group">
+                    <label for="post_text">Survey Name</label>
+                    <input type="text" name="survey_name" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="post_text">Send Date/Time</label>
+                    <input type="datetime-local" name="datetime" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="post_text">Description</label>
+                    <textarea name="description" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="post_text">Target Survey</label>
+                    <label>
+                        <input type="radio" name="for_type" name="facebook"> Facebook
+                    </label>
+                    <label>
+                        <input type="radio" name="for_type" name="line"> Line
+                    </label>
+                    <label>
+                        <input type="radio" name="for_type" name="both"> Both
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="post_text">Options</label>
+                    <textarea name="options" class="form-control" placeholder="e.g. question 1?$option 1|option 2|option3...,question2$option 1...."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Send to</label>
+                    <div class="row">
+                        <div class="col">
+                            <label>
+                                <input type="radio" value="all" name="send_to"/> All
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label>
+                                <input type="radio" value="users" name="send_to"/> Send to specific target
+                                <select class="form-control" multiple name="target_users">
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.name }} in {{ user.type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

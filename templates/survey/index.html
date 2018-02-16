@@ -1,11 +1,36 @@
-<ul>
-    {% for survey in surveys %}
-        <li>
-            {{ survey.survey_name }}
-            <a href="/survey/{{ survey.id }}">Detail</a>
-            <a href="/survey/{{ survey.id }}/edit">Edit</a>
-            <a href="/survey/{{ survey.id }}/delete">Delete</a>
-        </li>
-    {% endfor %}
-</ul>
-<a href="/survey/add">Create New Survey</a>
+{% extends "main.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h1>List of Scheduled Survey</h1>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Survey Name</th>
+                    <th>Datetime of Survey</th>
+                    <th>Target Users</th>
+                    <th>Number of Questions</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for survey in surveys %}
+                    <tr>
+                        <td>{{ survey.survey_name }}</td>
+                        <td>{{ survey.datetime }}</td>
+                        <td>{{ survey.survey_submission_set.count }}</td>
+                        <td>{{ survey.survey_value_set.count }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="/survey/{{ survey.id }}">Detail</a>
+                            <a class="btn btn-warning" href="/survey/{{ survey.id }}/edit">Edit</a>
+                            <a class="btn btn-danget" href="?id={{ survey.id }}&action=delete">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-success" href="/survey/add">Create New Survey</a>
+        </div>
+    </div>
+{% endblock %}
+

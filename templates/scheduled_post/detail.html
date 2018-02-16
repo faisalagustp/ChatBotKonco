@@ -1,1 +1,34 @@
-{{ post.post_text }}
+{% extends "main.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h4>{{ post.post_text }}</h4>
+            <h5>{{ post.datetime }}</h5>
+            <h6>Extra Details</h6>
+            <p>{{ post.json_extra }}</p>
+            <h6>Table of Delivery Report</h6>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>Platform</th>
+                        <th>Date/Time of Sent</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post_report in post.scheduled_post_report_set.all %}
+                        <tr>
+                            <td>{{ post_report.user_account.chat_id }}</td>
+                            <td>{{ post_report.user_account.name }}</td>
+                            <td>{{ post_report.user_account.type }}</td>
+                            <td>{{ post_report.datetime_sended }}</td>
+                            <td>{{ post_report.status }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
