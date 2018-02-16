@@ -154,12 +154,12 @@ def analyze_reply(text,u_ac):
                     val.value = text
                     val.datetime = datetime.now()
                     val.save()
-                    if question_number in list_question:
+                    try:
                         list_question = list_question[question_number]
                         u_ac.short_memory="survey|"+str(question_number+1)
                         send_response(list_question.text, surveynya.user_account.chat_id, list_question.options)
                         u_ac.save()
-                    else:
+                    except Exception:
                         u_ac.short_memory = ""
                         send_response("survey selesai", surveynya.user_account.chat_id, "")
                         surveynya.status = "done"
