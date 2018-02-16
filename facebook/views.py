@@ -55,13 +55,13 @@ def facebook_callback(request):
                             u_ac.chat_id = chat_id
                             u_ac.type = "facebook"
                             u_ac.short_memory = "registration|ask_name"
-                            send_response("Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan "+name+"?",chat_id)
+                            send_response("Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan "+name+"?",chat_id,"ya|tidak")
                     return HttpResponse("")
         else:
             return HttpResponse("Not recognized")
         return HttpResponse("Failed")
 
-def send_response(message, sender_id):
+def send_response(message, sender_id,options=""):
     PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
 
     try:
@@ -71,14 +71,30 @@ def send_response(message, sender_id):
         headers = {
             "Content-Type": "application/json"
         }
-        data = json.dumps({
+        data = {
             "recipient": {
                 "id": sender_id
             },
             "message": {
                 "text": message
             }
-        })
+        }
+
+        if options!= "":
+            data["quick_replies"] = [
+                {
+                    "content_type":"text",
+                    "title":"Ya",
+                    "payload":"YES"
+                },
+                {
+                    "content_type": "text",
+                    "title": "Tidak",
+                    "payload": "NO"
+                }
+            ]
+
+        data = json.dump(data)
         r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
         if r.status_code != 200:
             pass
