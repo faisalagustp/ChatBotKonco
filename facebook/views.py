@@ -50,6 +50,7 @@ def facebook_callback(request):
                         else:
                             facebook_name = 'https://graph.facebook.com/2.12/'+chat_id+'?access_token='+PAGE_TOKEN
                             facebook_name = requests.get(facebook_name).json()
+                            print("Facebook name")
                             print(facebook_name)
                             u_ac = user_account()
                             u_ac.chat_id = chat_id
