@@ -10,7 +10,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-
+PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
 from management.models import user_account
 '''
     Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan <nama>?
@@ -23,7 +23,6 @@ from management.models import user_account
 
 @csrf_exempt
 def facebook_callback(request):
-    PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
     if request.method == "GET":
         VERIFY_TOKEN = "faisalkasepfaisalkasep"
         mode = request.GET.get('hub.mode')
@@ -63,7 +62,6 @@ def facebook_callback(request):
         return HttpResponse("Failed")
 
 def send_response(message, sender_id,options):
-    PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
 
     try:
         params = {
@@ -98,5 +96,21 @@ def send_response(message, sender_id,options):
         print ("Error")
 
 def analyze_reply(text,u_ac):
-    print(text)
-    print(u_ac)
+    if u_ac.short_memory=="registration|ask_name":
+        if str(text).lower()=="ya":
+            u_ac.short_memory = ""
+            facebook_name = 'https://graph.facebook.com/' + u_ac.chat_id + '?fields=name,id&access_token=' + PAGE_TOKEN
+            facebook_name = requests.get(facebook_name).json()
+            name = facebook_name["name"]
+            u_ac.name = name
+            u_ac.save()
+            send_response("Hi "+name+". Terimakasih telah menggunakan layanan kami. Kamu boleh tanya aku tentang apapun yang kamu mau.",u_ac.chat_id,"")
+        elif str(text).lower()=="tidak":
+            u_ac.short_memory = "registration|ask_name|no"
+            send_response("Oh, kalau begitu nama kamu siapa?",u_ac.chat_id,"")
+    elif u_ac.short_memory=="registration|ask_name|no":
+        text = str(text).replace("nama saya","").strip()
+        u_ac.name = text
+        u_ac.save()
+        send_response(
+            "Hi " + text + ". Terimakasih telah menggunakan layanan kami. Kamu boleh tanya aku tentang apapun yang kamu mau.", u_ac.chat_id, "")
