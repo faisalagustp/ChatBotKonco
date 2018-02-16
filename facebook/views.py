@@ -81,7 +81,7 @@ def send_response(message, sender_id,options):
         }
 
         if options!= "":
-            data["quick_replies"] = [
+            data["message"]["quick_replies"] = [
                 {
                     "content_type":"text",
                     "title":"Ya",
