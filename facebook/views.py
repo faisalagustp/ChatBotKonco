@@ -23,6 +23,7 @@ from management.models import user_account
 
 @csrf_exempt
 def facebook_callback(request):
+    PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
     if request.method == "GET":
         VERIFY_TOKEN = "faisalkasepfaisalkasep"
         mode = request.GET.get('hub.mode')
@@ -40,8 +41,6 @@ def facebook_callback(request):
             for entry in data_request["entry"]:
                 for messaging in entry["messaging"]:
                     if("message" in messaging):
-                        print("Messaging")
-                        print(messaging)
                         text = messaging["message"]["text"]
                         chat_id = messaging["sender"]["id"]
                         u_ac = user_account.objects.filter(type="facebook").filter(chat_id=chat_id)
@@ -49,6 +48,9 @@ def facebook_callback(request):
                             u_ac = u_ac[0]
                             send_response(u_ac.short_memory,text)
                         else:
+                            facebook_name = 'https://graph.facebook.com/2.12/'+chat_id+'?access_token='+PAGE_TOKEN
+                            facebook_name = requests.get(facebook_name).json()
+                            print(facebook_name)
                             u_ac = user_account()
                             u_ac.chat_id = chat_id
                             u_ac.type = "facebook"
