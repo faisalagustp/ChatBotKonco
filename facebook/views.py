@@ -63,6 +63,7 @@ def facebook_callback(request):
 
 def send_response(message, sender_id,options):
     print(message)
+    PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
     try:
         params = {
             "access_token": PAGE_TOKEN
@@ -91,7 +92,7 @@ def send_response(message, sender_id,options):
         data = json.dumps(data)
         r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
         if r.status_code != 200:
-            print(r)
+            print(r.content)
     except Exception as e:
         print ("Error")
 
