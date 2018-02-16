@@ -15,7 +15,7 @@ class scheduled_post_report(models.Model):
 
 class user_account(models.Model):
     chat_id = models.CharField(max_length=100)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,null=True,blank=True)
     type = models.CharField(max_length=20)
     short_memory = models.TextField(null=True,blank=True)
 
