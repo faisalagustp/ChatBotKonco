@@ -61,7 +61,7 @@ def facebook_callback(request):
             return HttpResponse("Not recognized")
         return HttpResponse("Failed")
 
-def send_response(message, sender_id,options=""):
+def send_response(message, sender_id,options):
     PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
 
     try:
