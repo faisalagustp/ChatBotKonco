@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import json
 import urllib
+from datetime import datetime
 
 import requests
 from django.http import JsonResponse, HttpResponse
@@ -11,7 +12,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
-from management.models import user_account, survey_submission
+from management.models import user_account, survey_submission, survey_submission_value
 
 '''
     Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan <nama>?
@@ -146,8 +147,23 @@ def analyze_reply(text,u_ac):
                 list_question = surveynya.survey.survey_value_set.all()
                 if list_question.count() > question_number:
                     u_ac.short_memory = "survey|1"
-                    list_question = list_question[question_number-1]
-                    send_response(list_question.text, surveynya.user_account.chat_id, list_question.options)
+                    question = list_question[question_number-1]
+                    val = survey_submission_value()
+                    val.survey_submission = surveynya
+                    val.survey_value = question
+                    val.value = text
+                    val.datetime = datetime.now()
+                    val.save()
+                    if question_number in list_question:
+                        list_question = list_question[question_number]
+                        u_ac.short_memory="survey|"+str(question_number+1)
+                        send_response(list_question.text, surveynya.user_account.chat_id, list_question.options)
+                        u_ac.save()
+                    else:
+                        u_ac.short_memory = ""
+                        send_response("survey selesai", surveynya.user_account.chat_id, "")
+                        surveynya.status = "done"
+                        surveynya.save()
                 else:
                     u_ac.short_memory = ""
                     send_response("survey selesai", surveynya.user_account.chat_id, "")
