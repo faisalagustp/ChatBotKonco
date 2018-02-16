@@ -85,7 +85,8 @@ def send_response(message, sender_id,options):
             for option in options.split("|"):
                 data_options.append({
                     "content_type":"text",
-                    "title":option
+                    "title":option,
+                    "payload":option
                 })
             data["message"]["quick_replies"] = data_options
 
