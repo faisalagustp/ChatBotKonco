@@ -47,7 +47,6 @@ def facebook_callback(request):
                         if u_ac.count()>0:
                             u_ac = u_ac[0]
                             analyze_reply(text,u_ac)
-                            send_response(u_ac.short_memory,text,"")
                         else:
                             facebook_name = 'https://graph.facebook.com/'+chat_id+'?fields=name,id&access_token='+PAGE_TOKEN
                             facebook_name = requests.get(facebook_name).json()
