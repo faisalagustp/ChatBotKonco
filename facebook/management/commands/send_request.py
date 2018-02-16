@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         #post message
         posts = models.scheduled_post_report.objects.filter(user_account__type="facebook").exclude(status="done")\
-            .filter(scheduled_post__datetime__lte=datetime.now()).filter(user_account__short_memory="")
+            .filter(user_account__short_memory="")
         print(posts.count())
         for post in posts:
             print("Masuk Satu")
@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         #surveys
         surveys = models.survey_submission.objects.filter(user_account__type="facebook").exclude(status="done")\
-            .filter(survey__datetime__lte=datetime.now()).filter(user_account__short_memory="").exclude(status="on progress")
+            .filter(user_account__short_memory="").exclude(status="on progress")
         print(surveys.count())
         for survey in surveys:
             print("Masuk Dua")
