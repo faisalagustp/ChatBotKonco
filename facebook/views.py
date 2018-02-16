@@ -48,15 +48,14 @@ def facebook_callback(request):
                             u_ac = u_ac[0]
                             send_response(u_ac.short_memory,text)
                         else:
-                            facebook_name = 'https://graph.facebook.com/'+chat_id+'?access_token='+PAGE_TOKEN
+                            facebook_name = 'https://graph.facebook.com/'+chat_id+'?fields=name,id&access_token='+PAGE_TOKEN
                             facebook_name = requests.get(facebook_name).json()
-                            print("Facebook name")
-                            print(facebook_name)
+                            name = facebook_name["name"]
                             u_ac = user_account()
                             u_ac.chat_id = chat_id
                             u_ac.type = "facebook"
                             u_ac.short_memory = "registration|ask_name"
-                            send_response("Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan <nama>?",chat_id)
+                            send_response("Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan "+name+"?",chat_id)
                     return HttpResponse("")
         else:
             return HttpResponse("Not recognized")
