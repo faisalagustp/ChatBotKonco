@@ -62,7 +62,7 @@ def facebook_callback(request):
         return HttpResponse("Failed")
 
 def send_response(message, sender_id,options):
-
+    print(message)
     try:
         params = {
             "access_token": PAGE_TOKEN
