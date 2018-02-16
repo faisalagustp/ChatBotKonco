@@ -62,7 +62,6 @@ def facebook_callback(request):
         return HttpResponse("Failed")
 
 def send_response(message, sender_id,options):
-    print(message)
     PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
     try:
         params = {
@@ -110,6 +109,7 @@ def analyze_reply(text,u_ac):
         elif str(text).lower()=="tidak":
             u_ac.short_memory = "registration|ask_name|no"
             send_response("Oh, kalau begitu nama kamu siapa?",u_ac.chat_id,"")
+            u_ac.save()
     elif u_ac.short_memory=="registration|ask_name|no":
         text = str(text).replace("nama saya","").strip()
         u_ac.name = text
