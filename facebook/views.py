@@ -94,7 +94,7 @@ def send_response(message, sender_id,options=""):
                 }
             ]
 
-        data = json.dump(data)
+        data = json.dumps(data)
         r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
         if r.status_code != 200:
             pass
