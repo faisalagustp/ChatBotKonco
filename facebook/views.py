@@ -40,6 +40,7 @@ def facebook_callback(request):
             for entry in data_request["entry"]:
                 for messaging in entry["messaging"]:
                     if("message" in messaging):
+                        print(messaging)
                         text = messaging["message"]["text"]
                         chat_id = messaging["sender"]["id"]
                         u_ac = user_account.objects.filter(type="facebook").filter(chat_id=chat_id)
