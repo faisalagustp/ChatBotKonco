@@ -11,6 +11,15 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 
+from management.models import user_account
+'''
+    Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan <nama>?
+    kalo ya:
+        Hi <nama>. Terimakasih telah menggunakan layanan kami. Kamu boleh tanya aku tentang apapun yang kamu mau.
+    kalo tidak:
+        Oh, kalau begitu nama kamu siapa?
+        Hi <nama>. Terimakasih telah menggunakan layanan kami. Kamu boleh tanya aku tentang apapun yang kamu mau.
+'''
 
 @csrf_exempt
 def facebook_callback(request):
@@ -31,7 +40,18 @@ def facebook_callback(request):
             for entry in data_request["entry"]:
                 for messaging in entry["messaging"]:
                     if("message" in messaging):
-                        send_response(messaging["message"]["text"], messaging["sender"]["id"])
+                        text = messaging["message"]["text"]
+                        chat_id = messaging["sender"]["id"]
+                        u_ac = user_account.objects.filter(type="facebook").filter(chat_id=chat_id)
+                        if u_ac.count()>0:
+                            u_ac = u_ac[0]
+                            send_response(u_ac.short_memory,text)
+                        else:
+                            u_ac = user_account()
+                            u_ac.chat_id = chat_id
+                            u_ac.type = "facebook"
+                            u_ac.short_memory = "registration|ask_name"
+                            send_response("Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan <nama>?",chat_id)
                     return HttpResponse("")
         else:
             return HttpResponse("Not recognized")

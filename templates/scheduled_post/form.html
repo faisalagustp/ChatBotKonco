@@ -1,0 +1,29 @@
+<form method="POST">
+    {% csrf_token %}
+    Broadcasted Post<br/>
+    <textarea name="post_text"></textarea><br/><br/>
+    Datetime<br/>
+    <input type="date" name="datetime"><br/><br/>
+    Message Type<br/>
+    <select name="message_type">
+        <option value="Text">Text</option>
+        <option value="Quick Replies (Pilihan Ganda)">Quick Replies (Pilihan Ganda)</option>
+        <option value="Text with Attachment" disabled>Text with Attachment (Audio/Video/Image/File)</option>
+        <option value="Templates" disabled>Templates</option>
+    </select><br/><br/>
+    Details<br/>
+    <textarea name="json_extra"></textarea><br/><br/>
+    Send to:
+    <label>
+        <input type="radio" value="all" name="send_to"/> All
+    </label>
+    <label>
+        <input type="radio" value="users" name="send_to"/>
+        <select multiple name="target_users">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <button>Save Post</button>
+</form>

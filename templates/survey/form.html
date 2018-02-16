@@ -1,0 +1,23 @@
+<form method="POST">
+    {% csrf_token %}
+
+    Survey Name<br/>
+        <input type="text" name="survey_name"><br/><br/>
+    Send Date/Time<br/>
+        <input type="datetime-local" name="datetime"><br/><br/>
+    Description<br/>
+        <textarea name="description"></textarea><br/><br/>
+    Target Survey<br/>
+        <label>
+            <input type="radio" name="for_type" name="facebook"> Facebook
+        </label>
+        <label>
+            <input type="radio" name="for_type" name="line"> Line
+        </label>
+        <label>
+            <input type="radio" name="for_type" name="both"> Both
+        </label> <br/><br/>
+    Options<br/>
+    <textarea name="options"></textarea><br/><br/>
+    <button>Save</button>
+</form>

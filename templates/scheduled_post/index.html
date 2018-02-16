@@ -1,0 +1,12 @@
+<ul>
+    {% for post in posts %}
+        <ul>
+            {{ post.post_text }} ({{ post.datetime }})
+            <a href="/post/{{ post.id }}">See Detail</a>
+            <a href="/post/{{ post.id }}/edit">Edit</a>
+            <a href="/post/{{ post.id }}/delete">Delete</a>
+        </ul>
+    {% endfor %}
+</ul>
+
+<a href="/post/add">Create new post</a>

@@ -1,0 +1,6 @@
+{{ survey.survey_name }}
+
+{% for value in survey.survey_value_set.all %}
+    {{ value.text }}<br/>
+    {{ value.options }}
+{% endfor %}

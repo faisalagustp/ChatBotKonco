@@ -17,10 +17,20 @@ from django.conf.urls import url
 from django.contrib import admin
 from facebook.views import facebook_callback
 from linebot.views import line_callback
+import management.views as management_callback
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^facebook/callback', facebook_callback),
     url(r'^line/callback', line_callback),
+    url(r'^$', management_callback.landing_page),
+    url(r'^post$', management_callback.list_scheduled_post),
+    url(r'^post/add$', management_callback.add_scheduled_post),
+    url(r'^post/(\d+)$', management_callback.detail_scheduled_post),
+    url(r'^post/(\d+)/edit$', management_callback.edit_scheduled_post),
+    url(r'^survey$', management_callback.list_survey),
+    url(r'^survey/add$', management_callback.add_survey),
+    url(r'^survey/(\d+)$', management_callback.detail_survey),
+    url(r'^survey/(\d+)/edit$', management_callback.edit_survey),
 ]

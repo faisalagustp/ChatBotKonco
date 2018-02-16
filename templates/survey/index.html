@@ -1,0 +1,11 @@
+<ul>
+    {% for survey in surveys %}
+        <li>
+            {{ survey.survey_name }}
+            <a href="/survey/{{ survey.id }}">Detail</a>
+            <a href="/survey/{{ survey.id }}/edit">Edit</a>
+            <a href="/survey/{{ survey.id }}/delete">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="/survey/add">Create New Survey</a>
