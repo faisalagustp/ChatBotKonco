@@ -11,7 +11,8 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
-from management.models import user_account
+from management.models import user_account, survey_submission
+
 '''
     Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan <nama>?
     kalo ya:
@@ -62,7 +63,6 @@ def facebook_callback(request):
         return HttpResponse("Failed")
 
 def send_response(message, sender_id,options):
-    PAGE_TOKEN = "EAANWDfOtda8BAPsjZAgMmUcVvjZBKoOq3kxZBbNHMIRNHxGo0ZAZArae0FZBKkxuRCNcszoF3ZB3XkZBfvgcIjzUmWleiZBc5b3gmMBGFNvh3tpYOrkfGf0k8ItuMKbbqP6KxFkMZCe2Jx9BK1QgL8oRD4Xgp0wkhqnGm1BeNA3j5hlAZDZD"
     try:
         params = {
             "access_token": PAGE_TOKEN
@@ -116,3 +116,41 @@ def analyze_reply(text,u_ac):
         u_ac.save()
         send_response(
             "Hi " + text + ". Terimakasih telah menggunakan layanan kami. Kamu boleh tanya aku tentang apapun yang kamu mau.", u_ac.chat_id, "")
+    elif str(u_ac.short_memory).startswith("survey"):
+        question_number = u_ac.short_memory.replace("survey","")
+        surveynya = survey_submission.objects.filter(user_account_id=u_ac.id).filter(status="on progress")
+        if surveynya.count()>0:
+            surveynya = surveynya[0]
+            if question_number=="":
+                if text=="ya":
+                    list_question = surveynya.survey.survey_value_set.all()
+                    if list_question.count() > 0:
+                        u_ac.short_memory = "survey|1"
+                        list_question = list_question[0]
+                        send_response(list_question.text, surveynya.user_account.chat_id, list_question.options)
+                    else:
+                        u_ac.short_memory = ""
+                        send_response("survey selesai",surveynya.user_account.chat_id,"")
+                        surveynya.status="done"
+                        surveynya.save()
+                    u_ac.save()
+                else:
+                    u_ac.short_memory = ""
+                    send_response("survey selesai", surveynya.user_account.chat_id, "")
+                    surveynya.status = "done"
+                    surveynya.save()
+                    u_ac.save()
+            else:
+                question_number = question_number.replace("|","")
+                question_number = int(question_number)
+                list_question = surveynya.survey.survey_value_set.all()
+                if list_question.count() > question_number:
+                    u_ac.short_memory = "survey|1"
+                    list_question = list_question[question_number-1]
+                    send_response(list_question.text, surveynya.user_account.chat_id, list_question.options)
+                else:
+                    u_ac.short_memory = ""
+                    send_response("survey selesai", surveynya.user_account.chat_id, "")
+                    surveynya.status = "done"
+                    surveynya.save()
+                u_ac.save()
