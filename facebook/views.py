@@ -153,7 +153,6 @@ def analyze_reply(text,u_ac):
                 list_question = surveynya.survey.survey_value_set.all()
                 if list_question.count() > question_number:
                     question = list_question[question_number-1]
-                    print("Masuk Sini")
                     val = survey_submission_value()
                     val.survey_submission = surveynya
                     val.survey_value = question
@@ -171,6 +170,13 @@ def analyze_reply(text,u_ac):
                         surveynya.status = "done"
                         surveynya.save()
                 else:
+                    question = list_question[question_number - 1]
+                    val = survey_submission_value()
+                    val.survey_submission = surveynya
+                    val.survey_value = question
+                    val.value = text
+                    val.datetime = timezone.now()
+                    val.save()
                     u_ac.short_memory = ""
                     send_response("Terima kasih. Respon anda telah tersimpan", surveynya.user_account.chat_id, "")
                     surveynya.status = "done"
