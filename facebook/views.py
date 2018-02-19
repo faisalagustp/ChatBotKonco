@@ -99,31 +99,37 @@ def send_response(message, sender_id,options):
 
 def analyze_reply(text,u_ac):
     if u_ac.short_memory=="registration|ask_name":
-        if str(text).lower()=="ya":
+        if "ya" in str(text).lower():
             u_ac.short_memory = ""
             facebook_name = 'https://graph.facebook.com/' + u_ac.chat_id + '?fields=name,id&access_token=' + PAGE_TOKEN
             facebook_name = requests.get(facebook_name).json()
             name = facebook_name["name"]
             u_ac.name = name
             u_ac.save()
-            send_response("Hi "+name+". Terimakasih telah menggunakan layanan kami. Kamu boleh tanya aku tentang apapun yang kamu mau.",u_ac.chat_id,"")
+            send_response("Hi "+name+". Terimakasih telah menggunakan layanan kami. Pada masa percobaan ini, kami hanya bisa menangani broadcast post dan survey.",u_ac.chat_id,"")
         elif str(text).lower()=="tidak":
             u_ac.short_memory = "registration|ask_name|no"
             send_response("Oh, kalau begitu nama kamu siapa?",u_ac.chat_id,"")
             u_ac.save()
+        else:
+            facebook_name = 'https://graph.facebook.com/' + u_ac.chat_id + '?fields=name,id&access_token=' + PAGE_TOKEN
+            facebook_name = requests.get(facebook_name).json()
+            name = facebook_name["name"]
+            send_response("Saat ini fitur pengenalan bahasa indonesia belum diaktifkan di chat bot ini. Apa benar saat ini saya sedang chat dengan "+name+"?",u_ac.chat_id, "ya|tidak")
     elif u_ac.short_memory=="registration|ask_name|no":
         text = str(text).replace("nama saya","").strip()
         u_ac.name = text
+        u_ac.short_memory = ""
         u_ac.save()
         send_response(
-            "Hi " + text + ". Terimakasih telah menggunakan layanan kami. Kamu boleh tanya aku tentang apapun yang kamu mau.", u_ac.chat_id, "")
+            "Hi " + text + ". Terimakasih telah menggunakan layanan kami. Pada masa percobaan ini, kami hanya bisa menangani broadcast post dan survey.", u_ac.chat_id, "")
     elif str(u_ac.short_memory).startswith("survey"):
         question_number = u_ac.short_memory.replace("survey","")
         surveynya = survey_submission.objects.filter(user_account_id=u_ac.id).filter(status="on progress")
         if surveynya.count()>0:
             surveynya = surveynya[0]
             if question_number=="":
-                if text=="ya":
+                if "ya" in text:
                     list_question = surveynya.survey.survey_value_set.all()
                     if list_question.count() > 0:
                         u_ac.short_memory = "survey|1"
@@ -161,12 +167,12 @@ def analyze_reply(text,u_ac):
                         u_ac.save()
                     except Exception:
                         u_ac.short_memory = ""
-                        send_response("survey selesai", surveynya.user_account.chat_id, "")
+                        send_response("Terima kasih. Respon anda telah tersimpan.", surveynya.user_account.chat_id, "")
                         surveynya.status = "done"
                         surveynya.save()
                 else:
                     u_ac.short_memory = ""
-                    send_response("survey selesai", surveynya.user_account.chat_id, "")
+                    send_response("Terima kasih. Respon anda telah tersimpan", surveynya.user_account.chat_id, "")
                     surveynya.status = "done"
                     surveynya.save()
                 u_ac.save()
