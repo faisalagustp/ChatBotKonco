@@ -40,7 +40,7 @@
                             <td>{{ data.user_account.type }}</td>
                             <td>
                                 {% for submission_value in data.survey_submission_value_set.all %}
-                                    {{ submission_value.survey_value.text }}: {{ submission_value.value }}
+                                    {{ submission_value.survey_value.text }}: {{ submission_value.value }} <br/>
                                 {% endfor %}
                             </td>
                         </tr>
