@@ -32,12 +32,7 @@
                     <div class="row">
                         <div class="col">
                             <label>
-                                <input type="radio" value="all" name="send_to"/> All
-                            </label>
-                        </div>
-                        <div class="col">
-                            <label>
-                                <input type="radio" value="users" name="send_to"/> Send to specific target
+                                <input type="hidden" value="users" name="send_to"/> Send to specific target
                                 <select class="form-control" multiple name="target_users">
                                     {% for user in users %}
                                         <option value="{{ user.id }}">{{ user.name }} in {{ user.type }}</option>

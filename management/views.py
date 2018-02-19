@@ -97,9 +97,9 @@ def add_survey(request):
                 option = option.split("$")
                 sv = SurveyValue()
                 sv.survey = srvy
-                sv.text = option[0]
+                sv.text = str(option[0]).strip()
                 sv.type = "question"
-                sv.options = option[1]
+                sv.options = str(option[1]).strip()
                 sv.save()
 
             ##target user
