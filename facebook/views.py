@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import json
 import urllib
-from datetime import datetime
+from django.utils import timezone
 
 import requests
 from django.http import JsonResponse, HttpResponse
@@ -158,7 +158,7 @@ def analyze_reply(text,u_ac):
                     val.survey_submission = surveynya
                     val.survey_value = question
                     val.value = text
-                    val.datetime = datetime.now()
+                    val.datetime = timezone.now()
                     val.save()
                     try:
                         list_question = list_question[question_number]

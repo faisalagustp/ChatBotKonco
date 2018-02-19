@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from django.utils import timezone
 
 from django.core.management import BaseCommand
 from management import models
@@ -11,18 +11,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         #post message
         posts = models.scheduled_post_report.objects.filter(user_account__type="facebook").exclude(status="done")\
-            .filter(scheduled_post__datetime__lte=datetime.now()).filter(user_account__short_memory="")
+            .filter(scheduled_post__datetime__lte=timezone.now()).filter(user_account__short_memory="")
         print(posts.count())
         for post in posts:
             text = str(post.scheduled_post.post_text).replace("[name]",post.user_account.name)
             send_response(text,post.user_account.chat_id,"")
-            post.datetime_sended = datetime.now()
+            post.datetime_sended = timezone.now()
             post.status="done"
             post.save()
 
         #surveys
         surveys = models.survey_submission.objects.filter(user_account__type="facebook").exclude(status="done")\
-            .filter(survey__datetime__lte=datetime.now()).filter(user_account__short_memory="").exclude(status="on progress")
+            .filter(survey__datetime__lte=timezone.now()).filter(user_account__short_memory="").exclude(status="on progress")
         print(surveys.count())
         for survey in surveys:
             text = str(survey.survey.description).replace("[name]",survey.user_account.name)
