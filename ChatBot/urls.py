@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^facebook/callback', facebook_callback),
     url(r'^line/callback', line_callback),
     url(r'^$', management_callback.landing_page),
+    url(r'^privacy-policy$', management_callback.privacy_policy),
     url(r'^post$', management_callback.list_scheduled_post),
     url(r'^post/add$', management_callback.add_scheduled_post),
     url(r'^post/(\d+)$', management_callback.detail_scheduled_post),

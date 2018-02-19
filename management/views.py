@@ -137,3 +137,6 @@ def detail_survey(request,id):
     return render(request, "survey/detail.html",{
         "survey": survey_data
     })
+
+def privacy_policy(request):
+    return render(request,"privacy_policy.html")
