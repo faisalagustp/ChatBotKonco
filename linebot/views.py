@@ -11,11 +11,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def line_callback(request):
+    user_id = ''
     if request.method == "POST":
         data_request = json.loads(request.body.decode('utf-8'))
         send_message(data_request["events"][0]["replyToken"], data_request["events"][0]["message"]["text"])
         send_push_message(data_request["events"][0]["source"]["userId"])
-    return HttpResponse("clash Clawk")
+        user_id = data_request["events"][0]["source"]["userId"]
+    return HttpResponse()
 
 
 def send_message(reply_token, text):
