@@ -17,7 +17,7 @@ def line_callback(request):
         send_message(data_request["events"][0]["replyToken"], data_request["events"][0]["message"]["text"])
         send_push_message(data_request["events"][0]["source"]["userId"])
         user_id = data_request["events"][0]["source"]["userId"]
-    return HttpResponse()
+    return HttpResponse(user_id)
 
 
 def send_message(reply_token, text):
