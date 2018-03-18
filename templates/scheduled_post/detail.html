@@ -15,6 +15,7 @@
                         <th>Platform</th>
                         <th>Date/Time of Sent</th>
                         <th>Status</th>
+                        <th>Send Manually</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,6 +26,7 @@
                             <td>{{ post_report.user_account.type }}</td>
                             <td>{{ post_report.datetime_sended }}</td>
                             <td>{{ post_report.status }}</td>
+                            <td><a class="btn btn-primary" href="?send_id={{ post_report.id }}">Kirim Chat secara manual</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

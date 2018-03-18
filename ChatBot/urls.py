@@ -14,9 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib import admin
-from facebook.views import facebook_callback
-from linebot.views import line_callback
+
+from ChatBot import settings
+from facebook.views import facebook_callback, response_test
+from linebot.views import line_callback, test_message
 import management.views as management_callback
 
 
@@ -34,4 +37,8 @@ urlpatterns = [
     url(r'^survey/add$', management_callback.add_survey),
     url(r'^survey/(\d+)$', management_callback.detail_survey),
     url(r'^survey/(\d+)/edit$', management_callback.edit_survey),
+    url(r'^test$', response_test),
+    url(r'^upload$', management_callback.submit_file_content),
+    url(r'^test_line$', test_message),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

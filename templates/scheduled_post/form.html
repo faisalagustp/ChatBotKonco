@@ -4,28 +4,154 @@
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
-
                 <div class="form-group">
-                    <label for="post_text">Broadcasted Post</label>
-                    <textarea name="post_text" id="post_text" class="form-control"></textarea>
+                    <label for="datetime">Broadcast Title</label>
+                    <input class="form-control" name="post_text">
                 </div>
                 <div class="form-group">
                     <label for="datetime">Date/Time of Broadcast</label>
                     <input id="datetimepicker" class="form-control" name="datetime">
                 </div>
                 <div class="form-group">
-                    <label for="message_type">Message Type</label>
-                    <select name="message_type" class="form-control">
-                        <option value="Text">Text</option>
-                        <option value="Quick Replies (Pilihan Ganda)">Quick Replies (Pilihan Ganda)</option>
-                        <option value="Text with Attachment" disabled>Text with Attachment (Audio/Video/Image/File)
-                        </option>
-                        <option value="Templates" disabled>Templates</option>
+                    <label for="message_type">Broadcast Target</label>
+                    <select name="broadcast_target" class="form-control">
+                        <option value="Facebook">Facebook</option>
+                        <option value="Line">Line</option>
+                        <option value="Both">Both</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="json_extra">Details of Broadcast</label>
+                    <label for="message_type">Message Type</label>
+                    <select name="message_type" class="form-control">
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="json_extra">Broadcast Extra</label>
                     <textarea name="json_extra" class="form-control"></textarea>
+                </div>
+                <div id="div_text">
+                    <div class="form-group">
+                        <label for="json_extra">Pesan Teks</label>
+                        <textarea class="form-control" placeholder="Isikan dengan text broadcast yang akan dikirim" name="teks_message"></textarea>
+                        <input type="text" class="form-control" placeholder="Isikan dengan opsi jawaban, pisah setiap opsi jawaban dengan menggunakan koma" name="teks_option">
+                    </div>
+                </div>
+                <div id="div_attachment">
+                    <div class="form-group">
+                        <label for="json_extra">Pesan dengan Lampiran</label>
+                        <label for="json_extra">Upload Lampiran</label>
+                        <input type="file" name='file_attachment' class="form-control">
+                        <input type="hidden" name="file_attachment_name" class="form-control">
+                        <input type="text" class="form-control" placeholder="Isikan dengan opsi jawaban, pisah setiap opsi jawaban dengan menggunakan koma" name="attachment_option">
+                    </div>
+                </div>
+                <div id="div_generic">
+                    <div class="form-group">
+                        <label for="json_extra">Template Generik</label>
+                        <input type="text" class="form-control" placeholder="Judul" name="generic_title"/>
+                        <input type="text" class="form-control" placeholder="Sub Judul" name="generic_subtitle"/>
+                        <input type="text" class="form-control" placeholder="URL" name="generic_url"/>
+                        <label for="json_extra">Upload Foto</label>
+                        <input type="file" accept="image/*" name='file_attachment_generic' class="form-control">
+                        <input type="hidden" name='file_attachment_generic_name'>
+                        <label for="json_extra">Tombol Aksi</label>
+                        <div class="form-group" id="generic_action_1">
+                            <input type="text" class="form-control" placeholder="Action 1" name="generic_action_1" />
+                            <select name="generic_type_1" class="form-control">
+                                <option>URL</option>
+                                <option>Text</option>
+                                <option>Location</option>
+                                <option>Call</option>
+                                <option>Share</option>
+                            </select>
+                        </div>
+                        <div id="generic_action_placeholder">
+
+                        </div>
+                        <button type="button" class="btn btn-primary" id="add_new_generic">Add new action</button>
+                    </div>
+                </div>
+                <div id="div_location">
+                    <div class="form-group">
+                        <label for="json_extra">Location</label>
+                        <input type="text" id="location" name="location" class="form-control">
+                        <input type="hidden" name="latitude">
+                        <input type="hidden" name="longitude">
+                    </div>
+                </div>
+                <div id="div_listview">
+                    <label for="json_extra">Template List View</label>
+                    <div class="form-group">
+                        <label for="json_extra">Box Pertama</label>
+                        <input type="text" class="form-control" placeholder="Judul" name="text_name"/>
+                        <input type="text" class="form-control" placeholder="Sub Judul" name="text_name"/>
+                        <label for="json_extra">Upload Foto</label>
+
+                        <label for="json_extra">Tombol Aksi</label>
+                        <input type="text" class="form-control" placeholder="Action 1" name="text_name"/>
+                        <select name="wkwkw">
+                            <option>URL</option>
+                            <option>Text</option>
+                            <option>Location</option>
+                            <option>Call</option>
+                        </select>
+                        <button type="button">Add new action</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="json_extra">Box Pertama</label>
+                        <input type="text" class="form-control" placeholder="Judul" name="text_name"/>
+                        <input type="text" class="form-control" placeholder="Sub Judul" name="text_name"/>
+                        <label for="json_extra">Upload Foto</label>
+                        <input type="file" class="form-control">
+                        <label for="json_extra">Tombol Aksi</label>
+                        <input type="text" class="form-control" placeholder="Action 1" name="text_name"/>
+                        <select name="wkwkw">
+                            <option>URL</option>
+                            <option>Text</option>
+                            <option>Location</option>
+                            <option>Call</option>
+                        </select>
+                        <button type="button">Add new action</button>
+                    </div>
+                    <button type="button">Add New Box</button>
+                </div>
+                <div id="div_carousel">
+                    <label for="json_extra">Template Carousel</label>
+                    <div class="form-group">
+                        <label for="json_extra">Box Pertama</label>
+                        <input type="text" class="form-control" placeholder="Judul" name="text_name"/>
+                        <input type="text" class="form-control" placeholder="Sub Judul" name="text_name"/>
+                        <label for="json_extra">Upload Foto</label>
+                        <input type="file" class="form-control">
+                        <label for="json_extra">Tombol Aksi</label>
+                        <input type="text" class="form-control" placeholder="Action 1" name="text_name"/>
+                        <select name="wkwkw" class="form-control">
+                            <option>URL</option>
+                            <option>Text</option>
+                            <option>Location</option>
+                            <option>Call</option>
+                        </select>
+                        <button type="button">Add new action</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="json_extra">Box Pertama</label>
+                        <input type="text" class="form-control" placeholder="Judul" name="text_name"/>
+                        <input type="text" class="form-control" placeholder="Sub Judul" name="text_name"/>
+                        <label for="json_extra">Upload Foto</label>
+                        <input type="file" name="file_attachment_general" accept="image/*" class="form-control">
+                        <input type="hidden" name="file_attachment_general_name">
+                        <label for="json_extra">Tombol Aksi</label>
+                        <input type="text" class="form-control" placeholder="Action 1" name="text_name"/>
+                        <select name="wkwkw">
+                            <option>URL</option>
+                            <option>Text</option>
+                            <option>Location</option>
+                            <option>Call</option>
+                        </select>
+                        <button type="button">Add new action</button>
+                    </div>
+                    <button type="button">Add New Box</button>
                 </div>
                 <div class="form-group">
                     <label>Send to</label>
@@ -47,10 +173,163 @@
         </div>
     </div>
     <script>
+        var active_field = "";
         $(document).ready(function () {
             $("#datetimepicker").datetimepicker({
                 format: 'Y-m-d H:i'
             });
+
+            render_value("facebook");
+
+            function render_value(type){
+                var data_type = [];
+                if(type==="facebook"){
+                    data_type = ["text","attachment","generic","location","carousel","listview"]
+                }else if(type==="twitter"){
+                    data_type = ["text","attachment","generic","location","carousel","imagemap"]
+                }else{
+                    data_type = ["text","attachment","generic","location","carousel"]
+                }
+                data_type = ["text","attachment","generic","location"];
+                var tipe_string = "";
+                data_type.forEach(function(tipe){
+                    tipe_string += "<option value='"+tipe+"'>"+tipe+"</option>"
+                });
+
+                $("[name='message_type']").html(tipe_string);
+                set_fields(data_type[0]);
+
+            }
+
+            $('[name="broadcast_target"]').change(function(){
+                render_value($(this).val());
+            });
+
+            $("[name='message_type']").change(function(){
+                set_fields($(this).val());
+            });
+
+            function set_fields(field_name){
+                active_field = field_name;
+                generic_button_no = 1;
+                var data_type = ["text","attachment","generic","location","carousel","listview","imagemap"];
+                data_type.forEach(function(tipe){
+                    if(tipe==field_name){
+                        $("#div_"+tipe).show();
+                    }else{
+                        $("#div_"+tipe).hide();
+                    }
+                });
+            }
+
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var option = null;
+                if(active_field==="text"){
+                    var text = $("[name='teks_message']").val();
+                    var opsi = $("[name='teks_option']").val();
+                    var opsi_list = [];
+                    opsi.split(",").forEach(function(psi){
+                        opsi_list.push($.trim(psi));
+                    });
+                    option = {
+                        "text": text,
+                        "quick_replies":opsi_list
+                    };
+                }else if(active_field=='attachment'){
+                    var attachment = $("[name='file_attachment_name']").val();
+                    opsi = $("[name='attachment_option']").val();
+                    opsi_list = [];
+                    opsi.split(",").forEach(function(psi){
+                        opsi_list.push($.trim(psi));
+                    });
+                    var tipe = 'file';
+                    if(attachment.endsWith(".jpg")||attachment.endsWith(".jpeg")||attachment.endsWith(".png")){
+                        tipe='image';
+                    }else if(attachment.endsWith(".mp4")){
+                        tipe='video';
+                    }else if(attachment.endsWith(".mp3")||attachment.endsWith(".wav")){
+                        tipe='audio';
+                    }
+                    option = {
+                        "url" : "https://ctc.konco.xyz/"+attachment,
+                        "tipe": tipe,
+                        "quick_replies" : opsi_list
+                    };
+                }else if(active_field=="generic"){
+                    option = {
+                        "media_url" : "https://ctc.konco.xyz/"+$("[name='file_attachment_generic_name']").val(),
+                        "media_url_type": "image",
+                        "title": $("[name='generic_title']").val(),
+                        "subtitle": $("[name='generic_subtitle']").val(),
+                        "url":  $("[name='generic_url']").val(),
+                        "buttons": []
+                    };
+
+                    for(var i=1;i<=generic_button_no;i++){
+                        var button = {
+                            "tipe_button" : $("[name='generic_type_"+i+"']").val(),
+                            "konten" : $("[name='generic_action_"+i+"']").val()
+                        };
+                        option['buttons'].push(button);
+                    }
+                }else if(active_field=="location"){
+                    option = {
+                        "lat": $("[name='latitude']").val(),
+                        "long": $("[name='longitude']").val(),
+                        "location_name": $("#location").val()
+                    }
+                }
+                $("[name='json_extra']").val(JSON.stringify(option));
+            });
+
+            $('[name^="file_attachment"]').on('change', function() {
+                var file_data = $(this).prop('files')[0];
+                var form_data = new FormData();
+                var name_attachment = $(this).prop("name");
+                form_data.append('file', file_data);
+                $.ajax({
+                    url: '/upload',
+                    dataType: 'text',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    type: 'post',
+                    success: function(response){
+                        $("[name='"+name_attachment+"_name']").val(response);
+                    }
+                 });
+            });
+
+            var generic_button_no = 1;
+            $(document).on("click","#add_new_generic",function () {
+                generic_button_no++;
+                var gen_but_1 = $("#generic_action_1").clone();
+                var gen_but_baru = gen_but_1.html(gen_but_1.html().replace(/1/g , generic_button_no));
+                $("#generic_action_placeholder").append(gen_but_baru);
+            });
         });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsqaqkm8Mlzack7X0Lbz4lwpwTwR0QIaM&amp;libraries=places&amp;callback=initMap" async="" defer=""></script>
+    <script type="text/javascript">
+    var autocomplete;
+
+    function initMap() {
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('location'),
+            {
+                types: []
+            }
+        );
+        autocomplete.addListener('place_changed', onPlaceChanged);
+    }
+
+    function onPlaceChanged() {
+        var place = autocomplete.getPlace();
+        $("[name=latitude]").val(place.geometry.location.lat());
+        $("[name=longitude]").val(place.geometry.location.lng());
+    }
+
     </script>
 {% endblock %}

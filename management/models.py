@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class scheduled_post(models.Model):
-    post_text = models.TextField()
+    post_text = models.TextField(null=True,blank=True)
     datetime = models.DateTimeField()
     message_type = models.CharField(max_length=20)
     json_extra = models.TextField(null=True,blank=True)

@@ -1,8 +1,15 @@
+import json
+
+from django.core.files.storage import FileSystemStorage
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
 from management.models import scheduled_post, survey as Survey, user_account as UserAccount, scheduled_post_report, survey_value as SurveyValue, survey_submission
+from facebook.views import send_response as send_response_facebook
 
 
 def landing_page(request):
@@ -62,7 +69,14 @@ def edit_scheduled_post(request,id):
     })
 
 def detail_scheduled_post(request,id):
+    send_id = request.GET.get("send_id")
     post = get_object_or_404(scheduled_post, id=id)
+    if send_id != None:
+        report = get_object_or_404(scheduled_post_report, id=send_id)
+        json_extra = json.loads(report.scheduled_post.json_extra)
+        if report.user_account.type=="facebook":
+            send_response_facebook(report.user_account.chat_id,report.scheduled_post.message_type,json_extra)
+
     return render(request, "scheduled_post/detail.html",{
         "post": post
     })
@@ -140,3 +154,18 @@ def detail_survey(request,id):
 
 def privacy_policy(request):
     return render(request,"privacy_policy.html")
+
+def upload_asset(request):
+    destination = open('/upload', 'wb+')
+    for chunk in request.FILES['file'].chunks():
+        destination.write(chunk)
+    destination.close()
+    return HttpResponse("Wkwkwkw")
+
+@csrf_exempt
+def submit_file_content(request):
+    the_file = request.FILES['file'] # error throws up here.
+    fs = FileSystemStorage()
+    filename = fs.save(the_file.name, the_file)
+    uploaded_file_url = fs.url(filename)
+    return HttpResponse(uploaded_file_url)
