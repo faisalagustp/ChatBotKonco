@@ -16,12 +16,14 @@ def line_callback(request):
     user_id = ''
     if request.method == "POST":
         data_request = json.loads(request.body.decode('utf-8'))
+        print(data_request);
+        return False
         for entry in data_request["entry"]:
             for messaging in entry["messaging"]:
                 if ("message" in messaging):
                     text = messaging["message"]["text"]
                     chat_id = messaging["sender"]["id"]
-                    u_ac = user_account.objects.filter(type="facebook").filter(chat_id=chat_id)
+                    u_ac = user_account.objects.filter(type="line").filter(chat_id=chat_id)
                     if u_ac.count() > 0:
                         u_ac = u_ac[0]
                         analyze_reply(text, u_ac)
