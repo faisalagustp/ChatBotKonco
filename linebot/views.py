@@ -16,31 +16,29 @@ def line_callback(request):
     user_id = ''
     if request.method == "POST":
         data_request = json.loads(request.body.decode('utf-8'))
-        if data_request["object"] == "page":
-            for entry in data_request["entry"]:
-                for messaging in entry["messaging"]:
-                    if ("message" in messaging):
-                        text = messaging["message"]["text"]
-                        chat_id = messaging["sender"]["id"]
-                        u_ac = user_account.objects.filter(type="facebook").filter(chat_id=chat_id)
-                        if u_ac.count() > 0:
-                            u_ac = u_ac[0]
-                            analyze_reply(text, u_ac)
-                        else:
-                            name = "Fulan"
-                            u_ac = user_account()
-                            u_ac.chat_id = chat_id
-                            u_ac.type = "line"
-                            u_ac.short_memory = "registration|ask_name"
-                            options = {
-                                "text": "Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan " + name + "?",
-                                "quick_replies": ["Ya", "Tidak"],
-                            }
-                            send_push_message(chat_id, "text", options)
-                            u_ac.save()
-                    return HttpResponse("")
-        else:
-            return HttpResponse("Not recognized")
+        for entry in data_request["entry"]:
+            for messaging in entry["messaging"]:
+                if ("message" in messaging):
+                    text = messaging["message"]["text"]
+                    chat_id = messaging["sender"]["id"]
+                    u_ac = user_account.objects.filter(type="facebook").filter(chat_id=chat_id)
+                    if u_ac.count() > 0:
+                        u_ac = u_ac[0]
+                        analyze_reply(text, u_ac)
+                    else:
+                        name = "Fulan"
+                        u_ac = user_account()
+                        u_ac.chat_id = chat_id
+                        u_ac.type = "line"
+                        u_ac.short_memory = "registration|ask_name"
+                        options = {
+                            "text": "Halo. Perkenalkan nama saya Konco. Apa benar saat ini Konco sedang chat dengan dengan " + name + "?",
+                            "quick_replies": ["Ya", "Tidak"],
+                        }
+                        send_push_message(chat_id, "text", options)
+                        u_ac.save()
+                return HttpResponse("")
+
         return HttpResponse("Failed")
 
 def test_message(request):
